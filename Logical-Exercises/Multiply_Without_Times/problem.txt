@@ -1,0 +1,1 @@
+Create a method that multiply a number by 'x' times without using '*'
