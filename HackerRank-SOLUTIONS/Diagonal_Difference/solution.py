@@ -28,18 +28,11 @@ def diagonalDifference(arr):
     secondaryD = getSecondaryD(arr, size)
     return (int)(math.fabs(primaryD - secondaryD))
 
-if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+n = int(input())
+arr = []
 
-    n = int(input())
+for _ in range(n):
+    arr.append(list(map(int, input().rstrip().split())))
 
-    arr = []
-
-    for _ in range(n):
-        arr.append(list(map(int, input().rstrip().split())))
-
-    result = diagonalDifference(arr)
-
-    fptr.write(str(result) + '\n')
-
-    fptr.close()
+result = diagonalDifference(arr)
+print(str(result) + '\n')
