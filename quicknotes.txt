@@ -1,0 +1,24 @@
+(Não posso confirmar se as anotações abaixo estão corretas ou não)
+Aplicação em camadas DDD
+
+1 - APP 
+Onde vai o seu sistema/aplicativo
+2 - Application
+viewmodels, mappers, conversores, ??
+3 - Domain
+Models e interfaces
+4 - Infra
+Serviços/serviços externos
+
+5 - Data
+Conexão com banco de dados
+context e repositorios
+6 - CrossCutting
+Coisas comuns que podem ser compartilhadas com todas as camadas
+helpers, extension methods, resources
+
+(?) Infra conversa com Domain
+(?) Data conversa com Domain
+(?) Todas podem conversam com CrossCutting, mas ela não conversa com ninguém
+(?) Domain conversa com Application
+(?) Application conversa com APP
