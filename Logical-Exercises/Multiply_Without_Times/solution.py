@@ -6,4 +6,9 @@ def Multiply(num, times):
         result += num
     return result
 
+def MultiplyRecursive(num, times):
+	if (times == 0):
+		return 0
+	return num + MultiplyRecursive(num, times - 1)
+
 print(Multiply(2,5))
