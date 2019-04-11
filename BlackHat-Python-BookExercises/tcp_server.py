@@ -6,16 +6,16 @@ BIND_PORT = 9999
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-#dizendo ao servidor qual endereço ele deve ouvir
+#dizendo ao servidor qual endereco ele deve ouvir
 server.bind((BIND_IP,BIND_PORT))
 
-#servidor começa a ouvir
-#máximo de conexões acumuladas = 5
+#servidor comeca a ouvir
+#maximo de conexoes acumuladas = 5
 server.listen(5)
 
 print ("[*] Listening on %s:%d" % (BIND_IP,BIND_PORT))
 
-#esta é a thread para tratamento de clientes
+#esta eh a thread para tratamento de clientes
 
 def handle_client(client_socket):
     #exibe o que o cliente quer enviar
@@ -33,6 +33,6 @@ def handle_client(client_socket):
 
         print ("[*] Accepted connection from: %s:%d" % (addr[0],addr[1]))
 
-        #coloca a trhead de cliente em ação para tratar dados de entrada
+        #coloca a trhead de cliente em acaoo para tratar dados de entrada
         client_handler = threading.Thread(target=handle_client,args=(client,))
         client_handler.start()
