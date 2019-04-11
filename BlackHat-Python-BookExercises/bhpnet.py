@@ -230,3 +230,5 @@ def client_handler(client_socket):
             # envia de volta a resposta
             client_socket.send(response)
 #endregion BLOCO 5
+
+main()
