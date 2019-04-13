@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import socket
 
 TARGET_HOST = "127.0.0.1"

@@ -1,4 +1,6 @@
-﻿#region BLOCO 1
+﻿# -*- coding: utf-8 -*-
+
+#region BLOCO 1
 # imports and globals
 # importando bibliotecas necessárias
 import sys
