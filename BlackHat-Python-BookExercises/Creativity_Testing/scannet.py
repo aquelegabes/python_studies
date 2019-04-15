@@ -27,22 +27,36 @@ def help():
     print ("-tcp \tDefine porta TCP para conexão")
     sys.exit(0)
 
-def scanning():
+def getHosts():
     ipv4s = []
     subnets = []
-    i = 0
 
     if os.name == "nt": #windows
         call('ipconfig | findstr -i ipv4 > ipv4.txt', shell=True)
         call('ipconfig | findstr -i sub > subnet.txt', shell=True)
 
     # we'll assume it's only going to be 2 lines
-    file = open("ipv4", "r")
+    file = open("ipv4.txt", "r")
 
     for line in file:
         ipv4s.append(line),
+    file.close()
+    call('rm -f ipv4.txt', shell=True)
+    localhost = ipv4s[1].split(' ')[-1].replace('\n', '')
 
-    localhost = ipv4s[1].split(' ')
+    file = open("subnet.txt", "r")
+
+    for line in file:
+        subnets.append(line)
+    file.close()
+    call('rm -rf subnet.txt', shell=True)
+    subnet = subnets[1].split(' ')[-1].replace('\n', '')
+
+    return localhost, subnet
+
+def scanning():
+    host, subnet = getHosts()
+    
 
 def listening(target,port,typeconn):
     print()
