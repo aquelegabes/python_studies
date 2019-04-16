@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import socket
 import struct
 from ctypes import Structure, c_ubyte, c_ushort, c_ulong
