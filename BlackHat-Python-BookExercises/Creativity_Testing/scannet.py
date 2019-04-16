@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import ipobjects
 import sys
 import os
 import socket
 import getopt
+import time
+from threading import Thread
+from ipobjects import IP, ICMP
+from netaddr import IPNetwork, IPAddress
 from subprocess import call
 
 # globals
@@ -14,16 +17,17 @@ sender = ""
 target = ""
 typeconn = ""
 port = int()
+message = "checkIfAlive!"
 
 def help():
-    print ("ScanNet -- Scan, listen, connect")
-    print ("-s --scan \tEscaneia a rede para entradas de hosts")
-    print ("-t --target \tDefine um alvo. ex: -t 192.168.1.21")
-    print ("-p --port \tDefine uma porta. ex: -p 53125")
-    print ("-l --listen \tEscutar na conexão padrão TCP")
-    print ("-c --connect \tConecta e envia algo na conexão padrão TCP. ex: -c 123feijaoarroz")
-    print ("-udp \tDefine porta UDP para conexão")
-    print ("-tcp \tDefine porta TCP para conexão")
+    print (u"ScanNet -- Scan, listen, connect")
+    print (u"-s --scan \t\tEscaneia a rede para entradas de hosts")
+    print (u"-t --target \t\tDefine um alvo. ex: -t 192.168.1.21")
+    print (u"-p --port \t\tDefine uma porta. ex: -p 53125")
+    print (u"-l --listen \t\tEscutar na conexão padrão TCP")
+    print (u"-c --connect \t\tConecta e envia algo na conexão padrão TCP. ex: -c 123feijaoarroz")
+    print (u"-udp \t\t\tDefine porta UDP para conexão")
+    print (u"-tcp \t\t\tDefine porta TCP para conexão")
     sys.exit(0)
 
 def getHosts():
@@ -71,10 +75,62 @@ def getHosts():
         
     return localhost, subnet
 
+def udp_sender(subnet,msg):
+    time.sleep(2)
+    sender = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    
+    for ip in IPNetwork(subnet):
+        try:
+            sender.sendto(msg.encode('utf8'),(("%s") % ip,65212))
+            # print "[*] Sent to => %s:65212" % (ip)
+        except:
+            # print "[*] Failed sending to => %s:65212" % (ip)
+            pass
+
 def scanning():
     host, subnet = getHosts()
-    print host,subnet
+    hostsplit = host.split('.')
+    hostsplit[-1] = "0"
+    defaulthost = "%s.%s.%s.%s" % (hostsplit[0], hostsplit[1], hostsplit[2], hostsplit[3])
+    # set default subnet as 255 max hosts
+    subnet = "%s/22" % (defaulthost)
     
+    t = Thread(target=udp_sender, args=(subnet,message))
+    t.start()
+
+    if os.name == "nt":
+        socket_protocol = socket.IPPROTO_IP
+    else:
+        socket_protocol = socket.IPPROTO_ICMP
+
+    scanner = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket_protocol)
+    scanner.bind((host, 0))
+    scanner.setsockopt(socket.IPPROTO_IP,socket.IP_HDRINCL,1)
+    if os.name == "nt":
+        scanner.ioctl(socket.SIO_RCVALL,socket.RCVALL_ON)
+
+    try:
+        while True:
+            raw_buffer = scanner.recvfrom(65565)[0]
+            ip_header = IP(raw_buffer[0:20])
+
+            if ip_header.protocol == "ICMP":
+                offset = ip_header.ihl * 4
+                buf = raw_buffer[offset : offset + sys.getsizeof(ICMP)]
+                icmp_header = ICMP(buf)
+
+                if icmp_header.code == 3 and icmp_header.type == 3:
+                    if IPAddress(ip_header.src_address) in IPNetwork(subnet):
+                        if raw_buffer[len(raw_buffer)-len(message):] == message:
+                            print("[*] Host Up: %s" % ip_header.src_address)
+
+                continue
+
+    except KeyboardInterrupt:
+        if os.name == "nt":
+            scanner.ioctl(socket.SIO_RCVALL,socket.RCVALL_OFF)
+        print "\n[*] Exiting..."
+        sys.exit(0)
 
 def listening(target,port,typeconn):
     print()
@@ -97,10 +153,11 @@ def main():
     try:
         opts, args = getopt.getopt(
                         sys.argv[1:],
-                        "hle:t:p:c",
-                        ["help", "listen", "target", "port", "connect", "scan", "udp", "tcp"])
+                        "hlcsut:p:t",
+                        ["help", "listen", "target=", "port=", "connect", "scan", "udp", "tcp"])
     except getopt.GetoptError as err:
         print (str(err))
+        print
         help()
 
 
