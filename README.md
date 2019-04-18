@@ -3,4 +3,4 @@
 - Basic logical exercises
 - HackerRank exercises
 - BlackHat-Python book exercises
-- Soon: Django web projects
+- Django web projects (separate branches)
