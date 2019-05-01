@@ -17,11 +17,12 @@ def details(request, slug):
     if request.method == 'POST':
         form = ContactCourse(request.POST)
         if form.is_valid():
-            valid = context['is_valid'] = True
-            print(form.cleaned_data['name'])
+            valid = True
+            form.send_mail(course)
             form = ContactCourse()
     else:
         form = ContactCourse()
+        valid = False
 
     context = {
         'course': course,
