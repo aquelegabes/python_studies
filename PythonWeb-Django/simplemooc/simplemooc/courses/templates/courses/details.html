@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
@@ -29,9 +30,9 @@
     <div class="pure-u-1-3">
         <div class="l-box">
             {% if course.image %}
-                <img src="{{ course.image.url }}" alt="" />
+            <img src="{{ course.image.url }}" alt="" />
             {% else %}
-                <img src="{% static 'img/course-image.png' %}" alt="" />
+            <img src="{% static 'img/course-image.png' %}" alt="" />
             {% endif %}
             <h4>Dúvidas?</h4>
             <p>
