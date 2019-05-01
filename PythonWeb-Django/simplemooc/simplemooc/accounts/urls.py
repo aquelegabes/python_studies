@@ -10,4 +10,6 @@ urlpatterns = [
     path('editar/senha/', views.edit_password, name='edit_password'),
     path('sair/', LogoutView.as_view(next_page='core:home'), name='logout'),
     path('cadastrar/', views.register, name='register'),
+    path('nova-senha/', views.password_reset, name='password_reset'),
+    path('confirmar-nova-senha/<str:key>/', views.password_reset_confirm, name='password_reset_confirm'),
 ]
