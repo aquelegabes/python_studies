@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Course
+from .models import Course, Enrollment, Announcement, Comment
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = [
@@ -19,3 +19,4 @@ class CourseAdmin(admin.ModelAdmin):
     }
 
 admin.site.register(Course, CourseAdmin)
+admin.site.register([Enrollment, Announcement, Comment])
