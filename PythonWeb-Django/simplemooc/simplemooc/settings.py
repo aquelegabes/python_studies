@@ -86,6 +86,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # setting a mysql/mariadb justincase
+    # 'default' :{
+    #       'ENGINE': 'django.db.backends.mysql',
+    #       'NAME': 'myproject',
+    #       'USER': 'myprojectuser',
+    #       'PASSWORD': 'passw',
+    #       'HOST': 'localhost',
+    #       'PORT': '',
+    # }
 }
 
 
