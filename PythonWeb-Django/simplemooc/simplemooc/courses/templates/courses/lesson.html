@@ -34,12 +34,12 @@
                     <td>
                         {% if material.is_embedded %}
                         <a href="{% url 'courses:material' course.slug material.pk %}">
-                            <i class"fa fa-video-camera"></i>
+                            <i class="fa fa-video-camera"></i>
                             Acessar
                         </a>
                         {% else %}
                         <a target="_blank" href="{{ material.file.url }}">
-                            <i class"fa fa-download"></i>
+                            <i class="fa fa-download"></i>
                             Baixar
                         </a>
                         {% endif %}
