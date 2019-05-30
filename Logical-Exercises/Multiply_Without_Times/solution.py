@@ -11,4 +11,7 @@ def MultiplyRecursive(num, times):
 		return 0
 	return num + MultiplyRecursive(num, times - 1)
 
+def OneLinerRecursive(num, times):
+	return 0 if times == 0 else num + MultiplyRecursive(num, times-1)
+
 print(Multiply(2,5))
