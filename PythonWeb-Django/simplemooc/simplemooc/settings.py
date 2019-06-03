@@ -23,24 +23,33 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6#9y#ysol1+q%4_1f)%wkm#r(8g#0@d$*h)i%)gc@i9wtwnftw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+TEMPLATE_DEBUG = False
+
+# ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
+    # libs
+    'taggit',
+
+    # apps
     'simplemooc.core',
     'simplemooc.accounts',
     'simplemooc.courses',
+    'simplemooc.forum',
+    
 ]
 
 MIDDLEWARE = [
@@ -81,21 +90,21 @@ WSGI_APPLICATION = 'simplemooc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-    # setting a mysql/mariadb justincase
-    # 'default' :{
-    #       'ENGINE': 'django.db.backends.mysql',
-    #       'NAME': 'myproject',
-    #       'USER': 'myprojectuser',
-    #       'PASSWORD': 'passw',
-    #       'HOST': 'localhost',
-    #       'PORT': '',
-    # }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+#     # setting a mysql/mariadb justincase
+#     # 'default' :{
+#     #       'ENGINE': 'django.db.backends.mysql',
+#     #       'NAME': 'myproject',
+#     #       'USER': 'myprojectuser',
+#     #       'PASSWORD': 'passw',
+#     #       'HOST': 'localhost',
+#     #       'PORT': '',
+#     # }
+# }
 
 
 # Password validation
@@ -156,3 +165,28 @@ LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_URL = 'accounts:logout'
 AUTH_USER_MODEL = 'accounts.User'
+
+#Heroku Settings
+
+import dj_database_url
+DATABASES = {
+    'default': dj_database_url.config() 
+}
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
+STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+try:
+    from simplemooc.local_settings import *
+except:
+    pass
